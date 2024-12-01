@@ -4,9 +4,7 @@ import { Provider } from 'react-redux';
 import { store } from './store';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { Cart } from './pages/Cart';
 import { Home } from './pages/Home';
-import { Success } from './pages/Success';
 import { App } from './App';
 import { AgendamentosProvider } from './contexts/AgendamentosContext';
 
@@ -18,14 +16,6 @@ const router = createBrowserRouter([
       {
         path: '/',
         element: <Home />,
-      },
-      {
-        path: '/cart',
-        element: <Cart />,
-      },
-      {
-        path: '/order/:orderId/success',
-        element: <Success />,
       },
     ],
   },
