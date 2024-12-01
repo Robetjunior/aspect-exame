@@ -37,19 +37,36 @@ export const criarAgendamento = async (req: Request, res: Response, next: NextFu
     }
 
     // Criar o novo agendamento
-    const { data, error } = await supabase
+    const { data: novoAgendamento, error: errorInsercao } = await supabase
       .from('agendamentos')
-      .insert([{ exame_id, medico_id, data_hora: formattedDate, observacoes }]);
+      .insert([{ exame_id, medico_id, data_hora: formattedDate, observacoes }])
+      .select(`
+        id,
+        exame_id,
+        medico_id,
+        data_hora,
+        observacoes,
+        exame:exames (
+          id,
+          nome
+        ),
+        medico:medicos (
+          id,
+          nome
+        )
+      `)
+      .single();
 
-    if (error) {
-      return res.status(500).json({ error: error.message });
+    if (errorInsercao) {
+      return res.status(500).json({ error: errorInsercao.message });
     }
 
-    return res.status(201).json(data);
+    return res.status(201).json(novoAgendamento);
   } catch (error) {
     next(error);
   }
 };
+
 
 
 export const atualizarAgendamento = async (req: Request, res: Response) => {
