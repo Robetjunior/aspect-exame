@@ -163,6 +163,10 @@ export const AgendamentoForm: React.FC = () => {
   const tileClassName = ({ date }: { date: Date }) => {
     return isDateAvailable(date) ? 'available' : '';
   };
+  
+  const handleTimeSelection = (time: string) => {
+    setSelectedTime(time);
+  };
 
   return (
     <Container>
@@ -218,8 +222,9 @@ export const AgendamentoForm: React.FC = () => {
                 <TimeSlotsContainer>
                   {getAvailableTimes(selectedDate).map((time) => (
                     <button
+                      type="button"
                       key={time}
-                      onClick={() => setSelectedTime(time)}
+                      onClick={() => handleTimeSelection(time)}
                       className={selectedTime === time ? 'selected' : ''}
                     >
                       {time}

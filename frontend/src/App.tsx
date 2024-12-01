@@ -12,7 +12,7 @@ export function App() {
       <GlobalStyle />
 
       <CartContextProvider>
-        <Header />
+        {/* <Header /> */}
         <Outlet />
       </CartContextProvider>
     </ThemeProvider>

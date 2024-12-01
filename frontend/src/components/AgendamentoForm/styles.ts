@@ -40,17 +40,28 @@ export const FormGroup = styled.div`
 `;
 
 export const Button = styled.button`
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
-  border-radius: 5px;
-  background-color: ${({ theme }) => theme.colors.primary};
+  border-radius: 8px;
+  background-color: #28a745; /* Verde para indicar ação positiva */
   color: #fff;
   cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 15px;
+  transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
+    background-color: #218838; /* Tom mais escuro no hover */
+  }
+
+  &:active {
+    background-color: #1e7e34; /* Tom ainda mais escuro no clique */
+  }
+
+  &:disabled {
+    background-color: #6c757d; /* Cinza para estado desabilitado */
+    cursor: not-allowed;
   }
 `;
 
