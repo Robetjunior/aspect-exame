@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import api from '../../services/api';
-import { Container, Button, CalendarContainer, TimeSlotsContainer } from './styles';
+import { Container, Form, FormGroup, Button, CalendarContainer, TimeSlotsContainer } from './styles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useAgendamentos } from '../../contexts/AgendamentosContext';
@@ -174,8 +174,8 @@ export const AgendamentoForm: React.FC = () => {
 
   return (
     <Container>
-      <form onSubmit={handleSubmit}>
-        <div>
+      <Form onSubmit={handleSubmit}>
+        <FormGroup>
           <label htmlFor="exame">Tipo de Exame:</label>
           <select
             id="exame"
@@ -190,8 +190,8 @@ export const AgendamentoForm: React.FC = () => {
               </option>
             ))}
           </select>
-        </div>
-        <div>
+        </FormGroup>
+        <FormGroup>
           <label htmlFor="medico">Médico:</label>
           <select
             id="medico"
@@ -206,49 +206,45 @@ export const AgendamentoForm: React.FC = () => {
               </option>
             ))}
           </select>
-        </div>
-        <div style={{ display: 'flex', gap: '20px' }}>
-          <div>
-            <label>Data Disponível:</label>
-            <CalendarContainer>
-              <Calendar
-                value={selectedDate}
-                onChange={(date) => setSelectedDate(date as Date)}
-                tileDisabled={tileDisabled}
-                tileClassName={tileClassName}
-              />
-            </CalendarContainer>
-          </div>
-          <div>
-            {selectedDate && (
-              <>
-                <label>Horários Disponíveis:</label>
-                <TimeSlotsContainer>
-                  {getAvailableTimes(selectedDate).map((time) => (
-                    <button
-                      type="button"
-                      key={time}
-                      onClick={() => handleTimeSelection(time)}
-                      className={selectedTime === time ? 'selected' : ''}
-                    >
-                      {time}
-                    </button>
-                  ))}
-                </TimeSlotsContainer>
-              </>
-            )}
-          </div>
-        </div>
-        <div>
+        </FormGroup>
+        <FormGroup>
+          <label>Data Disponível:</label>
+          <CalendarContainer>
+            <Calendar
+              value={selectedDate}
+              onChange={(date) => setSelectedDate(date as Date)}
+              tileDisabled={tileDisabled}
+              tileClassName={tileClassName}
+            />
+          </CalendarContainer>
+        </FormGroup>
+        {selectedDate && (
+          <FormGroup>
+            <label>Horários Disponíveis:</label>
+            <TimeSlotsContainer>
+              {getAvailableTimes(selectedDate).map((time) => (
+                <button
+                  type="button"
+                  key={time}
+                  onClick={() => handleTimeSelection(time)}
+                  className={selectedTime === time ? 'selected' : ''}
+                >
+                  {time}
+                </button>
+              ))}
+            </TimeSlotsContainer>
+          </FormGroup>
+        )}
+        <FormGroup>
           <label htmlFor="observacoes">Observações:</label>
           <textarea
             id="observacoes"
             value={observacoes}
             onChange={(e) => setObservacoes(e.target.value)}
           />
-        </div>
+        </FormGroup>
         <Button type="submit">Agendar Exame</Button>
-      </form>
+      </Form>
     </Container>
   );
 };

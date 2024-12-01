@@ -1,27 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { ExamesList } from '../../components/ExamesList';
 import { AgendamentoForm } from '../../components/AgendamentoForm';
 import { AgendamentosList } from '../../components/AgendamentoList';
-import { Container, Section } from './styles';
+import { Container, Section, Card, BackButton } from './styles';
 import { defaultTheme } from '../../styles/themes/default';
+import { FaArrowLeft } from 'react-icons/fa';
 
 export function Home() {
+  const [visibleSection, setVisibleSection] = useState<'exames' | 'form' | 'agendamentos' | null>(null);
+
+  const renderContent = () => {
+    switch (visibleSection) {
+      case 'exames':
+        return <ExamesList />;
+      case 'form':
+        return <AgendamentoForm />;
+      case 'agendamentos':
+        return <AgendamentosList />;
+      default:
+        return (
+          <div>
+            <Card onClick={() => setVisibleSection('exames')}>Exames Disponíveis</Card>
+            <Card onClick={() => setVisibleSection('form')}>Agendar Novo Exame</Card>
+            <Card onClick={() => setVisibleSection('agendamentos')}>Agendamentos</Card>
+          </div>
+        );
+    }
+  };
+
   return (
     <ThemeProvider theme={defaultTheme}>
       <Container>
-        <Section>
-          <h2>Exames Disponíveis</h2>
-          <ExamesList />
-        </Section>
-        <Section>
-          <h2>Agendar Novo Exame</h2>
-          <AgendamentoForm />
-        </Section>
-        <Section>
-          <h2>Agendamentos</h2>
-          <AgendamentosList />
-        </Section>
+        {visibleSection && (
+          <BackButton onClick={() => setVisibleSection(null)}>
+            <FaArrowLeft />
+            Voltar
+          </BackButton>
+        )}
+        <Section>{renderContent()}</Section>
       </Container>
     </ThemeProvider>
   );

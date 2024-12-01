@@ -1,15 +1,14 @@
-// src/components/AgendamentoForm/styles.ts
 import styled from 'styled-components';
 
 export const Container = styled.div`
-  background-color: ${({ theme }) => theme.colors['base-card'] || '#f9f9f9'};
-  padding: 24px;
+  background-color: #ffffff;
+  padding: 32px;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-  max-width: 800px;
+  max-width: 100%;
   margin: 0 auto;
   font-family: Arial, sans-serif;
+  border: 2px solid #a3d9a5;
 `;
 
 export const Form = styled.form`
@@ -21,48 +20,48 @@ export const Form = styled.form`
 export const FormGroup = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 16px;
 
   label {
     font-weight: bold;
-    font-size: 18px;
-    color: ${({ theme }) => theme.colors['base-subtitle'] || '#333'};
+    font-size: 20px;
+    color: #000000;
   }
 
   input,
   select,
   textarea {
-    padding: 14px;
-    border: 1px solid ${({ theme }) => theme.colors['base-border'] || '#ccc'};
+    padding: 16px;
+    border: 2px solid #a3d9a5;
     border-radius: 8px;
-    font-size: 16px;
+    font-size: 18px;
     line-height: 1.5;
   }
 
   textarea {
     resize: vertical;
-    font-size: 16px;
+    font-size: 18px;
   }
 `;
 
 export const Button = styled.button`
-  padding: 16px 32px;
+  padding: 20px 40px;
   border: none;
   border-radius: 12px;
-  background-color: #0066cc; /* Azul amigável */
-  color: #fff;
+  background-color: #006400;
+  color: #ffffff;
   cursor: pointer;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   margin-top: 20px;
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #004999; /* Azul mais escuro */
+    background-color: #004b00;
   }
 
   &:active {
-    background-color: #003366;
+    background-color: #003300;
   }
 
   &:disabled {
@@ -72,22 +71,22 @@ export const Button = styled.button`
 `;
 
 export const CalendarContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 24px;
 
   .react-calendar {
-    border: 2px solid ${({ theme }) => theme.colors['base-border'] || '#ccc'};
+    border: 2px solid #a3d9a5;
     border-radius: 12px;
     width: 100%;
 
     .react-calendar__tile--now {
-      background: ${({ theme }) => theme.colors.primaryLight || '#e6f7ff'};
-      color: ${({ theme }) => theme.colors['base-title'] || '#333'};
+      background: #e6ffe6;
+      color: #000000;
       border-radius: 8px;
     }
 
     .react-calendar__tile--active {
-      background: ${({ theme }) => theme.colors.primaryDark || '#0066cc'};
-      color: white;
+      background: #006400;
+      color: #ffffff;
       border-radius: 8px;
     }
 
@@ -100,7 +99,7 @@ export const CalendarContainer = styled.div`
     .react-calendar__month-view__weekdays {
       font-weight: bold;
       font-size: 18px;
-      color: ${({ theme }) => theme.colors['base-title'] || '#666'};
+      color: #000000;
     }
 
     button {
@@ -112,28 +111,28 @@ export const CalendarContainer = styled.div`
 export const TimeSlotsContainer = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: 15px;
+  gap: 20px;
   margin-top: 10px;
 
   button {
-    padding: 14px 20px;
-    border: 2px solid ${({ theme }) => theme.colors['base-border'] || '#ccc'};
+    padding: 16px 22px;
+    border: 2px solid #a3d9a5;
     border-radius: 8px;
-    background-color: ${({ theme }) => theme.colors['base-button'] || '#f0f0f0'};
-    color: ${({ theme }) => theme.colors['base-title'] || '#333'};
-    font-size: 16px;
+    background-color: #f0f0f0;
+    color: #000000;
+    font-size: 18px;
     cursor: pointer;
     transition: background-color 0.2s ease, border-color 0.2s ease;
 
     &:hover {
-      background-color: ${({ theme }) => theme.colors.primaryLight || '#e6f7ff'};
-      color: ${({ theme }) => theme.colors.primaryDark || '#0066cc'};
+      background-color: #e6ffe6;
+      color: #006400;
     }
 
     &.selected {
-      background-color: ${({ theme }) => theme.colors.primary || '#0066cc'};
-      color: white;
-      border: 2px solid ${({ theme }) => theme.colors.primaryDark || '#004999'};
+      background-color: #006400;
+      color: #ffffff;
+      border: 2px solid #004b00;
     }
   }
 `;

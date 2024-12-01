@@ -121,3 +121,44 @@ export const CoffeeList = styled.section`
     grid-column-gap: 32px;
   }
 `
+
+export const Card = styled.div`
+  background: ${({ theme }) => theme.colors.primary};
+  color: black;
+  padding: 1.5rem;
+  margin: 0.5rem 0;
+  border-radius: 8px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 1.5rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+  }
+`;
+
+export const BackButton = styled.button`
+  background: ${({ theme }) => theme.colors.primary};
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  color: "black";
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: background-color 0.2s, transform 0.2s;
+
+  &:hover {
+    background-color: ${({ theme }) => theme.colors.primaryDark};
+    transform: scale(1.05);
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+`;
