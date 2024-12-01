@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { removerAgendamento } from '../../store/agendamentosSlice';
+import React, { useState } from 'react';
 import api from '../../services/api';
 import Modal from 'react-modal';
+import { useAgendamentos } from '../../contexts/AgendamentosContext';
 import {
   ListContainer,
   List,
@@ -13,27 +12,15 @@ import {
   ModalActions,
   ConfirmButton,
   CancelButton,
+  NoAgendamentosMessage
 } from './styles';
 
 Modal.setAppElement('#root');
 
 export const AgendamentosList: React.FC = () => {
-  const [agendamentos, setAgendamentos] = useState<Agendamento[]>([]);
+  const { agendamentos, removerAgendamento } = useAgendamentos();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [agendamentoToDelete, setAgendamentoToDelete] = useState<number | null>(null);
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    const fetchAgendamentos = async () => {
-      try {
-        const response = await api.get('/agendamentos');
-        setAgendamentos(response.data);
-      } catch (error) {
-        console.error('Erro ao buscar agendamentos:', error);
-      }
-    };
-    fetchAgendamentos();
-  }, []);
 
   const openModal = (id: number) => {
     setAgendamentoToDelete(id);
@@ -49,8 +36,7 @@ export const AgendamentosList: React.FC = () => {
     if (agendamentoToDelete !== null) {
       try {
         await api.delete(`/agendamentos/${agendamentoToDelete}`);
-        setAgendamentos(agendamentos.filter((agendamento) => agendamento.id !== agendamentoToDelete));
-        dispatch(removerAgendamento(agendamentoToDelete));
+        removerAgendamento(agendamentoToDelete);
         closeModal();
       } catch (error) {
         console.error('Erro ao excluir agendamento:', error);
@@ -71,26 +57,32 @@ export const AgendamentosList: React.FC = () => {
 
   return (
     <ListContainer>
-      <List>
-        {agendamentos.map((agendamento) => (
-          <ListItem key={agendamento.id}>
-            <div>
-              <ItemText>
-                <strong>Exame:</strong> {agendamento.exame.nome}
-              </ItemText>
-              <ItemText>
-                <strong>Data da consulta:</strong> {formatDate(agendamento.data_hora)}
-              </ItemText>
-              {agendamento.observacoes && (
+      {agendamentos.length === 0 ? (
+        <NoAgendamentosMessage>
+          Não há agendamentos realizados.
+        </NoAgendamentosMessage>
+      ) : (
+        <List>
+          {agendamentos.map((agendamento) => (
+            <ListItem key={agendamento.id}>
+              <div>
                 <ItemText>
-                  <strong>Observações:</strong> {agendamento.observacoes}
+                  <strong>Exame:</strong> {agendamento.exame?.nome || 'Nome do exame não disponível'}
                 </ItemText>
-              )}
-            </div>
-            <DeleteButton onClick={() => openModal(agendamento.id)}>Excluir</DeleteButton>
-          </ListItem>
-        ))}
-      </List>
+                <ItemText>
+                  <strong>Data da consulta:</strong> {formatDate(agendamento.data_hora)}
+                </ItemText>
+                {agendamento.observacoes && (
+                  <ItemText>
+                    <strong>Observações:</strong> {agendamento.observacoes}
+                  </ItemText>
+                )}
+              </div>
+              <DeleteButton onClick={() => openModal(agendamento.id)}>Excluir</DeleteButton>
+            </ListItem>
+          ))}
+        </List>
+      )}
       <Modal
         isOpen={modalIsOpen}
         onRequestClose={closeModal}

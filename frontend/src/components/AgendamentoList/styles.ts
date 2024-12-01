@@ -130,3 +130,10 @@ export const CancelButton = styled.button`
     outline: 3px solid ${({ theme }) => theme.colors['base-border']};
   }
 `;
+
+export const NoAgendamentosMessage = styled.div`
+  text-align: center;
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 20px;
+`;

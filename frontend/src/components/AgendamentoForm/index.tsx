@@ -3,6 +3,7 @@ import api from '../../services/api';
 import { Container, Button, CalendarContainer, TimeSlotsContainer } from './styles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import { useAgendamentos } from '../../contexts/AgendamentosContext';
 
 interface Exame {
   id: number;
@@ -32,6 +33,8 @@ export const AgendamentoForm: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [observacoes, setObservacoes] = useState<string>('');
 
+  const { adicionarAgendamento, agendamentos } = useAgendamentos();
+  
   useEffect(() => {
     const fetchExames = async () => {
       try {
@@ -94,7 +97,7 @@ export const AgendamentoForm: React.FC = () => {
       setDisponibilidades([]);
       setSelectedDate(null);
     }
-  }, [medicoId]);
+  }, [medicoId, agendamentos]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -113,7 +116,13 @@ export const AgendamentoForm: React.FC = () => {
         data_hora: data_hora.toISOString(),
         observacoes,
       };
-      await api.post('/agendamentos', novoAgendamento);
+  
+      const response = await api.post('/agendamentos', novoAgendamento);
+      const agendamentoCriado = response.data;
+  
+      // Adiciona o agendamento criado ao contexto
+      adicionarAgendamento(agendamentoCriado);
+  
       alert('Agendamento criado com sucesso!');
       setExameId('');
       setMedicoId('');

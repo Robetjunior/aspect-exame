@@ -8,6 +8,7 @@ import { Cart } from './pages/Cart';
 import { Home } from './pages/Home';
 import { Success } from './pages/Success';
 import { App } from './App';
+import { AgendamentosProvider } from './contexts/AgendamentosContext';
 
 const router = createBrowserRouter([
   {
@@ -33,7 +34,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <Provider store={store}>
-      <RouterProvider router={router} />
+      <AgendamentosProvider>
+        <RouterProvider router={router} />
+      </AgendamentosProvider>
     </Provider>
   </React.StrictMode>,
 );
