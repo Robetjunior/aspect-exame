@@ -102,38 +102,33 @@ export const AgendamentoForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!exameId || !medicoId || !selectedDate || !selectedTime) {
-      alert('Por favor, preencha todos os campos obrigatórios.');
-      return;
+        alert('Por favor, preencha todos os campos obrigatórios.');
+        return;
     }
     try {
-      const data_hora = new Date(selectedDate);
-      const [hours, minutes] = selectedTime.split(':').map(Number);
-      data_hora.setHours(hours, minutes);
-  
-      const novoAgendamento = {
-        exame_id: exameId,
-        medico_id: medicoId,
-        data_hora: data_hora.toISOString(),
-        observacoes,
-      };
-  
-      const response = await api.post('/agendamentos', novoAgendamento);
-      const agendamentoCriado = response.data;
-  
-      // Adiciona o agendamento criado ao contexto
-      adicionarAgendamento(agendamentoCriado);
-  
-      alert('Agendamento criado com sucesso!');
-      setExameId('');
-      setMedicoId('');
-      setSelectedDate(null);
-      setSelectedTime('');
-      setObservacoes('');
+        const data_hora = new Date(selectedDate);
+        const [hours, minutes] = selectedTime.split(':').map(Number);
+        data_hora.setHours(hours, minutes);
+
+        const novoAgendamento = {
+            exame_id: exameId,
+            medico_id: medicoId,
+            data_hora: data_hora.toISOString(),
+            observacoes,
+        };
+
+        await adicionarAgendamento(novoAgendamento);
+        alert('Agendamento criado com sucesso!');
+        setExameId('');
+        setMedicoId('');
+        setSelectedDate(null);
+        setSelectedTime('');
+        setObservacoes('');
     } catch (error) {
-      console.error('Erro ao criar agendamento:', error);
-      alert('Erro ao criar agendamento. Tente novamente.');
+        console.error('Erro ao criar agendamento:', error);
+        alert('Erro ao criar agendamento. Tente novamente.');
     }
-  };
+};
 
   const handleExameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedExameId = Number(e.target.value);
