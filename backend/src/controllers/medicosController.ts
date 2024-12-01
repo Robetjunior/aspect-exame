@@ -33,14 +33,11 @@ export const detalharMedico = async (req: Request, res: Response) => {
 
 export const listarMedicosPorEspecialidade = async (req: Request, res: Response) => {
   const { especialidade } = req.params;
-  console.log('Especialidade recebida:', especialidade);
 
   const { data, error } = await supabase
     .from('medicos')
     .select('*')
     .eq('especialidade', especialidade);
-
-  console.log('Médicos encontrados:', data);
 
   if (error) {
     console.error('Erro ao buscar médicos:', error.message);
