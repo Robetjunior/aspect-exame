@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import api from '../../services/api';
 import Modal from 'react-modal';
 import { useAgendamentos } from '../../contexts/AgendamentosContext';
+import { toast } from 'react-toastify';
 import {
   ListContainer,
   List,
@@ -37,9 +38,12 @@ export const AgendamentosList: React.FC = () => {
       try {
         await api.delete(`/agendamentos/${agendamentoToDelete}`);
         removerAgendamento(agendamentoToDelete);
+        toast.success('Agendamento deletado!');
+
         closeModal();
       } catch (error) {
         console.error('Erro ao excluir agendamento:', error);
+        toast.error('Erro ao excluir agendamento');
       }
     }
   };

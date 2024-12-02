@@ -4,6 +4,7 @@ import { Container, Form, FormGroup, Button, CalendarContainer, TimeSlotsContain
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useAgendamentos } from '../../contexts/AgendamentosContext';
+import { toast } from 'react-toastify';
 
 interface Exame {
   id: number;
@@ -102,7 +103,7 @@ export const AgendamentoForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!exameId || !medicoId || !selectedDate || !selectedTime) {
-        alert('Por favor, preencha todos os campos obrigatórios.');
+        toast.info('Por favor, preencha todos os campos obrigatórios.');
         return;
     }
     try {
@@ -118,7 +119,7 @@ export const AgendamentoForm: React.FC = () => {
         };
 
         await adicionarAgendamento(novoAgendamento);
-        alert('Agendamento criado com sucesso!');
+        toast.success('Agendamento criado com sucesso!');
         setExameId('');
         setMedicoId('');
         setSelectedDate(null);
@@ -126,7 +127,7 @@ export const AgendamentoForm: React.FC = () => {
         setObservacoes('');
     } catch (error) {
         console.error('Erro ao criar agendamento:', error);
-        alert('Erro ao criar agendamento. Tente novamente.');
+        toast.error('Erro ao criar agendamento. Tente novamente.');
     }
 };
 
