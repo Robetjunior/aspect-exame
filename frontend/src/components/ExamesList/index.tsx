@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import api from '../../services/api';
 import Skeleton from '@mui/material/Skeleton';
 import { Container, List, ListItem, ItemText, SearchInput } from './styles';
@@ -14,6 +14,7 @@ export const ExamesList: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [filteredExames, setFilteredExames] = useState<Exame[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const searchInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     const fetchExames = async () => {
@@ -49,9 +50,17 @@ export const ExamesList: React.FC = () => {
     }
   }, [searchTerm, exames]);
 
+  useEffect(() => {
+    // Coloca o foco no input de pesquisa ao carregar o componente
+    if (searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, []);
+
   return (
     <Container>
       <SearchInput
+        ref={searchInputRef}
         type="text"
         placeholder="Buscar por nome ou especialidade"
         value={searchTerm}
