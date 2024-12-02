@@ -5,6 +5,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { useAgendamentos } from '../../contexts/AgendamentosContext';
 import { toast } from 'react-toastify';
+import ClipLoader from 'react-spinners/ClipLoader';
 
 interface Exame {
   id: number;
@@ -33,6 +34,7 @@ export const AgendamentoForm: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [observacoes, setObservacoes] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
 
   const { adicionarAgendamento } = useAgendamentos();
   
@@ -103,6 +105,7 @@ export const AgendamentoForm: React.FC = () => {
         toast.info('Por favor, preencha todos os campos obrigatórios.');
         return;
     }
+    setLoading(true);
     try {
         const data_hora = new Date(selectedDate);
         const [hours, minutes] = selectedTime.split(':').map(Number);
@@ -125,6 +128,8 @@ export const AgendamentoForm: React.FC = () => {
     } catch (error) {
         console.error('Erro ao criar agendamento:', error);
         toast.error('Erro ao criar agendamento. Tente novamente.');
+    } finally {
+      setLoading(false);
     }
 };
 
@@ -249,7 +254,9 @@ export const AgendamentoForm: React.FC = () => {
             onChange={(e) => setObservacoes(e.target.value)}
           />
         </FormGroup>
-        <Button type="submit">Agendar Exame</Button>
+        <Button type="submit" disabled={loading}>
+          {loading ? <ClipLoader size={20} color="#fff" /> : 'Agendar Exame'}
+        </Button>      
       </Form>
     </Container>
   );
