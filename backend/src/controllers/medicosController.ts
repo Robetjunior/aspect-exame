@@ -120,8 +120,6 @@ export const pesquisarMedicos = async (req: Request, res: Response) => {
   }
 
   const { data, error } = await query;
-  console.log('Resultado da consulta:', data);
-
   if (error) {
     return res.status(500).json({ error: error.message });
   }

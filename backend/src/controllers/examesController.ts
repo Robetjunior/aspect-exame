@@ -46,8 +46,6 @@ export const listarAgendamentosPorExame = async (req: Request, res: Response) =>
 
 export const pesquisarExames = async (req: Request, res: Response) => {
   const { nome, especialidade } = req.query;
-  console.log('Parâmetros de consulta:', { nome, especialidade });
-
   let query = supabase.from('exames').select('*');
 
   if (nome) {
@@ -59,8 +57,6 @@ export const pesquisarExames = async (req: Request, res: Response) => {
   }
 
   const { data, error } = await query;
-  console.log('Resultado da consulta:', data);
-
   if (error) {
     return res.status(500).json({ error: error.message });
   }

@@ -22,16 +22,12 @@ export const ExamesList: React.FC = () => {
 
   // Evita duplicação do fetch ao carregar a lista
   useEffect(() => {
-    console.log('Carregado:', carregado);
-    console.log('Lista de exames:', lista);
-
     const fetchExames = async () => {
       if (!carregado) {
         try {
           setLoading(true);
           const response = await api.get('/exames');
           dispatch(setExames(response.data));
-          console.log('Exames carregados com sucesso');
         } catch (error) {
           console.error('Erro ao buscar exames:', error);
         } finally {

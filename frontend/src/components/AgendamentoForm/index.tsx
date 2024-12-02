@@ -76,7 +76,6 @@ export const AgendamentoForm: React.FC = () => {
           const response = await api.get(`/medicos/${medicoId}/disponibilidades`);
           const disponibilidadesData = response.data;
           setDisponibilidades(disponibilidadesData);
-          console.log(disponibilidades)
           // Encontrar a data disponível mais próxima
           if (disponibilidadesData.length > 0) {
             const today = new Date();

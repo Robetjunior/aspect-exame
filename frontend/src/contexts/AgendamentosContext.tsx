@@ -51,7 +51,6 @@ export const AgendamentosProvider: React.FC<{ children: React.ReactNode }> = ({ 
   };
 
   useEffect(() => {
-    console.log('Updated agendamentos:', agendamentos);
   }, [agendamentos]);
 
   return (
