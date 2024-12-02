@@ -1,20 +1,5 @@
 import styled from 'styled-components'
 
-import { mixins } from '../../../../../CoffeeDelivery/src/styles/mixins'
-
-export const Hero = styled.section`
-  position: relative;
-
-  img#hero-bg {
-    position: absolute;
-    top: 0;
-    left: 0;
-    max-height: 544px;
-    width: 100vw;
-    object-fit: cover;
-  }
-`
-
 export const Button = styled.button`
   padding: 10px 20px;
   border: none;
@@ -32,21 +17,27 @@ export const Button = styled.button`
 export const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: 32px;
+  background-color: #ffffff;
+  border-radius: 12px;
+  border: 2px solid #a3d9a5; /* Bordas consistentes */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 40px;
 `;
 
 export const Section = styled.section`
-  background-color: ${({ theme }) => theme.colors['base-card']};
-  padding: 20px;
-  border-radius: 8px;
+  background-color: #f9f9f9; /* Tom de fundo claro */
+  padding: 24px;
+  border-radius: 12px;
+  border: 2px solid #a3d9a5; /* Mesma borda */
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 
   h2 {
     margin-bottom: 16px;
-    color: ${({ theme }) => theme.colors['base-title']};
+    font-size: 24px;
+    color: #000000;
   }
 `;
 
@@ -67,22 +58,6 @@ export const HeroContent = styled.div`
   }
 `
 
-export const Heading = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-
-  > h1 {
-    ${mixins.fonts.titleXL}
-    color: ${({ theme }) => theme.colors['base-title']}
-  }
-
-  > span {
-    ${mixins.fonts.textL}
-    color: ${({ theme }) => theme.colors['base-subtitle']}
-  }
-`
-
 export const Info = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -96,69 +71,51 @@ export const Info = styled.div`
     svg {
       padding: 8px;
       border-radius: 999px;
+      background-color: #e6ffe6; /* Destaque leve */
     }
   }
-`
-
-export const CoffeeList = styled.section`
-  max-width: 1160px;
-  padding: 32px 20px 150px;
-  margin: 0 auto;
-
-  display: flex;
-  flex-direction: column;
-  gap: 54px;
-
-  > h2 {
-    ${mixins.fonts.titleL}
-    color: ${({ theme }) => theme.colors['base-subtitle']}
-  }
-
-  > div {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-    grid-row-gap: 40px;
-    grid-column-gap: 32px;
-  }
-`
+`;
 
 export const Card = styled.div`
-  background: ${({ theme }) => theme.colors.primary};
-  color: black;
+  background: #006400;
+  color: #ffffff;
   padding: 1.5rem;
   margin: 0.5rem 0;
-  border-radius: 8px;
+  border-radius: 12px;
   cursor: pointer;
   text-align: center;
-  font-size: 1.5rem;
+  font-size: 18px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s, box-shadow 0.2s;
 
   &:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+    background-color: #004b00;
   }
 `;
 
 export const BackButton = styled.button`
-  background: ${({ theme }) => theme.colors.primary};
-  padding: 1rem 2rem;
+  background: #006400;
+  padding: 16px 32px;
   border: none;
   border-radius: 12px;
   cursor: pointer;
-  color: "black";
-  font-size: 1.5rem;
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: bold;
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  transition: background-color 0.2s, transform 0.2s;
+  gap: 12px;
+  transition: background-color 0.3s, transform 0.2s;
 
   &:hover {
-    background-color: ${({ theme }) => theme.colors.primaryDark};
+    background-color: #004b00;
     transform: scale(1.05);
   }
 
   &:active {
+    background-color: #003300;
     transform: scale(0.95);
   }
 `;
