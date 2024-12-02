@@ -45,7 +45,7 @@ Desenvolver uma aplicação web para gerenciamento de agendamentos de exames hos
   - React Calendar
   - React Toastify
   - Styled Components
-  - Material UI
+  - Redux: Biblioteca para gerenciamento de estado da aplicação.
 - **Build:** Vite.js
 
 ### **Backend**
@@ -81,11 +81,8 @@ Desenvolver uma aplicação web para gerenciamento de agendamentos de exames hos
 
 2. Crie os arquivos .env para o backend com as seguintes variáveis:
    ```bash
-    POSTGRES_USER=postgres
-    POSTGRES_PASSWORD=postgres
-    POSTGRES_DB=mydatabase
-    SUPABASE_URL=<sua_url_supabase>
-    SUPABASE_ANON_KEY=<sua_chave_supabase>
+    SUPABASE_URL=https://warbnlibtbaktxtyjoxb.supabase.co
+    SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndhcmJubGlidGJha3R4dHlqb3hiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzI5MTQxODgsImV4cCI6MjA0ODQ5MDE4OH0.xfQ36D6VmYHMvrPKQGX1i2w-gBuqZHuvcu0wPK4CMKM
     ```
 
 3. Construa os contêineres usando Docker Compose:
@@ -98,15 +95,42 @@ Desenvolver uma aplicação web para gerenciamento de agendamentos de exames hos
     docker-compose up -d
     ```
 
-5. Acesse o frontend no navegador:
+5. Após executar este comando, seus serviços estarão ativos e prontos para uso. Você pode verificar o status dos contêineres com:
+    ```bash
+    docker-compose ps
+    ```
+
+6. E visualizar os logs com:
+    ```bash
+    docker-compose logs
+    ```
+
+7. Acesse o frontend no navegador:
     - URL: http://localhost:5173
 
-6. Certifique-se de que o backend está rodando:
+8. Certifique-se de que o backend está rodando:
     - URL: http://localhost:3000
 
 ### Deploy
 - Frontend: Pode ser hospedado em serviços como Vercel ou Netlify.
 - Backend: Pode ser hospedado em Heroku ou configurado para execução em servidores próprios.
+
+### Executando sem Docker
+Caso prefira executar o projeto sem Docker, siga os passos abaixo:
+
+1. Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+1. Backend
+```bash
+cd backend
+npm install
+npm run dev
+```
 
 ### Autor
 José Roberto Ferreira Junior
