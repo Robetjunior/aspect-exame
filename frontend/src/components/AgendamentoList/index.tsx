@@ -3,6 +3,7 @@ import api from '../../services/api';
 import Modal from 'react-modal';
 import { useAgendamentos } from '../../contexts/AgendamentosContext';
 import { toast } from 'react-toastify';
+import { ClipLoader } from 'react-spinners'; 
 import {
   ListContainer,
   List,
@@ -22,6 +23,7 @@ export const AgendamentosList: React.FC = () => {
   const { agendamentos, removerAgendamento } = useAgendamentos();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [agendamentoToDelete, setAgendamentoToDelete] = useState<number | null>(null);
+  const [loading, setLoading] = useState<boolean>(false); // Estado de carregamento
 
   const openModal = (id: number) => {
     setAgendamentoToDelete(id);
@@ -35,15 +37,17 @@ export const AgendamentosList: React.FC = () => {
 
   const handleDelete = async () => {
     if (agendamentoToDelete !== null) {
+      setLoading(true); // Inicia o carregamento
       try {
         await api.delete(`/agendamentos/${agendamentoToDelete}`);
         removerAgendamento(agendamentoToDelete);
         toast.success('Agendamento deletado!');
-
         closeModal();
       } catch (error) {
         console.error('Erro ao excluir agendamento:', error);
         toast.error('Erro ao excluir agendamento');
+      } finally {
+        setLoading(false); // Finaliza o carregamento
       }
     }
   };
@@ -82,7 +86,9 @@ export const AgendamentosList: React.FC = () => {
                   </ItemText>
                 )}
               </div>
-              <DeleteButton onClick={() => openModal(agendamento.id)}>Excluir</DeleteButton>
+              <DeleteButton onClick={() => openModal(agendamento.id)} disabled={loading}>
+                {loading ? <ClipLoader size={20} color="#fff" /> : 'Excluir'}
+              </DeleteButton>
             </ListItem>
           ))}
         </List>
@@ -106,8 +112,12 @@ export const AgendamentosList: React.FC = () => {
           <h2>Confirmação de Exclusão</h2>
           <p>Você tem certeza que deseja excluir este agendamento?</p>
           <ModalActions>
-            <ConfirmButton onClick={handleDelete}>Sim</ConfirmButton>
-            <CancelButton onClick={closeModal}>Não</CancelButton>
+            <ConfirmButton onClick={handleDelete} disabled={loading}>
+              {loading ? <ClipLoader size={20} color="#fff" /> : 'Sim'}
+            </ConfirmButton>
+            <CancelButton onClick={closeModal} disabled={loading}>
+              Não
+            </CancelButton>
           </ModalActions>
         </ModalContent>
       </Modal>
