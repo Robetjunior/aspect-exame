@@ -34,7 +34,7 @@ export const AgendamentoForm: React.FC = () => {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [observacoes, setObservacoes] = useState<string>('');
 
-  const { adicionarAgendamento, agendamentos } = useAgendamentos();
+  const { adicionarAgendamento } = useAgendamentos();
   
   useEffect(() => {
     const fetchExames = async () => {
@@ -76,16 +76,14 @@ export const AgendamentoForm: React.FC = () => {
           const response = await api.get(`/medicos/${medicoId}/disponibilidades`);
           const disponibilidadesData = response.data;
           setDisponibilidades(disponibilidadesData);
-          // Encontrar a data disponível mais próxima
           if (disponibilidadesData.length > 0) {
             const today = new Date();
             const closestDate = disponibilidadesData
               .map((disp) => new Date(disp.data_hora_inicio))
-              .filter((date) => date >= today) // Considera apenas datas futuras
-              .sort((a, b) => a.getTime() - b.getTime())[0]; // Ordena e pega a mais próxima
-
+              .filter((date) => date >= today)
+              .sort((a, b) => a.getTime() - b.getTime())[0];
             if (closestDate) {
-              setSelectedDate(closestDate); // Ajusta o estado para a data mais próxima
+              setSelectedDate(closestDate);
             }
           }
         } catch (error) {
@@ -97,7 +95,7 @@ export const AgendamentoForm: React.FC = () => {
       setDisponibilidades([]);
       setSelectedDate(null);
     }
-  }, [medicoId, agendamentos]);
+  }, [medicoId]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -149,19 +147,27 @@ export const AgendamentoForm: React.FC = () => {
 
   const getAvailableTimes = (date: Date) => {
     const normalizedDate = date.toISOString().split('T')[0];
+    const today = new Date().toISOString().split('T')[0];
     return disponibilidades
       .filter((disp) => {
-        const start = new Date(disp.data_hora_inicio).toISOString().split('T')[0];
-        return normalizedDate === start;
+        const start = new Date(disp.data_hora_inicio);
+        const startDate = start.toISOString().split('T')[0];
+        if (startDate !== normalizedDate) return false;
+        if (startDate === today) {
+          const now = new Date();
+          return start.getTime() > now.getTime();
+        }
+        return true;
       })
       .map((disp) => {
         const start = new Date(disp.data_hora_inicio);
-        return start.toTimeString().split(' ')[0].substring(0, 5); // Retorna no formato HH:MM
+        return start.toTimeString().split(' ')[0].substring(0, 5);
       });
   };
 
   const tileDisabled = ({ date }: { date: Date }) => {
-    return !isDateAvailable(date);
+    const today = new Date();
+    return date < today || !isDateAvailable(date);
   };
 
   const tileClassName = ({ date }: { date: Date }) => {
