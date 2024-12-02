@@ -36,7 +36,7 @@ export const AgendamentosList: React.FC = () => {
         try {
           setLoading(true);
           const response = await api.get('/agendamentos');
-          console.log(response.data)
+
           dispatch(setAgendamentos(response.data));
         } catch (error) {
           console.error('Erro ao buscar agendamentos:', error);
@@ -77,8 +77,8 @@ export const AgendamentosList: React.FC = () => {
     }
   };
 
-  const formatDate = (dateString) => {
-    const options = {
+  const formatDate = (dateString: string): string => {
+    const options: Intl.DateTimeFormatOptions = {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -102,7 +102,7 @@ export const AgendamentosList: React.FC = () => {
             <ListItem key={agendamento.id}>
               <div>
                 <ItemText>
-                  <strong>Exame:</strong> {agendamento.exame?.nome || 'Nome do exame não disponível'}
+                  <strong>Exame:</strong> {agendamento.exame.nome || 'Nome do exame não disponível'}
                 </ItemText>
                 <ItemText>
                   <strong>Data da consulta:</strong> {formatDate(agendamento.data_hora)}

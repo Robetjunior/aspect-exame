@@ -1,12 +1,22 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import api from './api';
 
-interface Agendamento {
-  exameId: number;
+export interface Agendamento {
+  id?: number;
+  exame_id: number;
   medicoId: number;
   dataHora: string;
-  observacoes?: string;
+  observacoes: string;
 }
+
+export interface BackendAgendamento {
+  id?: number;
+  exame_id: number;
+  medico_id: number;
+  data_hora: string;
+  observacoes: string;
+}
+
 
 // Função para listar agendamentos - sem alteração
 export const listarAgendamentos = async () => {
@@ -21,20 +31,17 @@ export const excluirAgendamento = async (id: number) => {
 
 // Função assíncrona para criar agendamento utilizando createAsyncThunk
 export const criarAgendamento = createAsyncThunk(
-  'agendamentos/criar', // Ação para identificar a operação no Redux
-  async (agendamento: Agendamento, { rejectWithValue }) => {
-    try {
-      // Envia a requisição para criar o agendamento
-      const response = await api.post('/agendamentos', agendamento);
-      return response.data;
-    } catch (error: unknown) {
-      if (error instanceof Error) {
-        // Agora é seguro acessar 'error.message'
-        return rejectWithValue(error.message);
-      } else {
-        // Trate casos onde 'error' não é uma instância de 'Error'
-        return rejectWithValue('Erro desconhecido');
-      }
-    }
+  'agendamentos/criarAgendamento',
+  async (novoAgendamento: BackendAgendamento) => {
+    const response = await api.post('/agendamentos', novoAgendamento);
+    // Convert backend response to frontend format
+    const agendamento: Agendamento = {
+      id: response.data.id,
+      exame_id: response.data.exame_id,
+      medicoId: response.data.medico_id,
+      dataHora: response.data.data_hora,
+      observacoes: response.data.observacoes,
+    };
+    return agendamento;
   }
 );

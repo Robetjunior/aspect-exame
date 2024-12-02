@@ -1,11 +1,12 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import api from '../services/api';
 
-interface Agendamento {
-  id: number;
-  exame_id: number;
-  medico_id: number;
-  data_hora: string;
+
+export interface Agendamento {
+  id?: number; 
+  exameId: number;
+  medicoId: number;
+  dataHora: string;
   observacoes: string;
 }
 

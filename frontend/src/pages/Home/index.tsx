@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ThemeProvider } from 'styled-components';
 import { ExamesList } from '../../components/ExamesList';
 import { AgendamentoForm } from '../../components/AgendamentoForm';

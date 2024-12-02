@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
-import { criarAgendamento } from '../../services/agendamentoService';
+import { BackendAgendamento, criarAgendamento } from '../../services/agendamentoService';
 import { Container, Form, FormGroup, Button, CalendarContainer, TimeSlotsContainer } from './styles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
@@ -8,6 +8,7 @@ import { setAgendamentos } from '../../store/agendamentosSlice';
 import api from '../../services/api';
 import { useAppDispatch } from '../../hooks';
 import { ClipLoader } from 'react-spinners';
+
 interface Exame {
   id: number;
   nome: string;
@@ -82,9 +83,9 @@ export const AgendamentoForm: React.FC = () => {
           if (disponibilidadesData.length > 0) {
             const today = new Date();
             const closestDate = disponibilidadesData
-              .map((disp) => new Date(disp.data_hora_inicio))
-              .filter((date) => date >= today)
-              .sort((a, b) => a.getTime() - b.getTime())[0];
+              .map((disp: Disponibilidade) => new Date(disp.data_hora_inicio))
+              .filter((date: Date) => date >= today)
+              .sort((a: Date, b: Date) => a.getTime() - b.getTime())[0];
             if (closestDate) {
               setSelectedDate(closestDate);
             }
@@ -111,14 +112,14 @@ export const AgendamentoForm: React.FC = () => {
       const data_hora = new Date(selectedDate);
       const [hours, minutes] = selectedTime.split(':').map(Number);
       data_hora.setHours(hours, minutes);
-      const novoAgendamento = {
+      const novoAgendamento: BackendAgendamento = {
         exame_id: exameId,
         medico_id: medicoId,
         data_hora: data_hora.toISOString(),
         observacoes,
       };
 
-      // Dispatch action to create agendamento
+      // Send 'novoAgendamento' to the backend
       await dispatch(criarAgendamento(novoAgendamento)).unwrap();
       
       // Optionally, fetch updated agendamentos to display in AgendamentosList
@@ -149,7 +150,7 @@ export const AgendamentoForm: React.FC = () => {
 
   const isDateAvailable = (date: Date) => {
     const normalizedDate = date.toISOString().split('T')[0];
-    return disponibilidades.some((disp) => {
+    return disponibilidades.some((disp: Disponibilidade) => {
       const start = new Date(disp.data_hora_inicio).toISOString().split('T')[0];
       const end = new Date(disp.data_hora_fim).toISOString().split('T')[0];
       return normalizedDate >= start && normalizedDate <= end;
@@ -160,7 +161,7 @@ export const AgendamentoForm: React.FC = () => {
     const normalizedDate = date.toISOString().split('T')[0];
     const today = new Date().toISOString().split('T')[0];
     return disponibilidades
-      .filter((disp) => {
+      .filter((disp: Disponibilidade) => {
         const start = new Date(disp.data_hora_inicio);
         const startDate = start.toISOString().split('T')[0];
         if (startDate !== normalizedDate) return false;

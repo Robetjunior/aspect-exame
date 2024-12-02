@@ -1,13 +1,21 @@
 {
-    "version": "0.2",
-    "language": "pt-BR",
-    "words": [
-      "lista",
-      "carregado",
-      "Exames",
-      "especialidade",
-      "setExames"
-    ],
-    "dictionaries": ["portuguese"]
+  "version": "0.2",
+  "language": "pt-BR",
+  "words": [
+    "lista",
+    "carregado",
+    "Exames",
+    "especialidade",
+    "setExames",
+    "Observacoes",
+    "observacoes",
+    "medicos",
+    "spinners",
+    "Slots",
+    "toast",
+    "today",
+    "disp",
+    "Card"
+  ],
+  "dictionaries": ["portuguese"]
 }
-  

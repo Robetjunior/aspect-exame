@@ -1,11 +1,19 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { criarAgendamento } from '../services/agendamentoService';
 
+interface Exame {
+  id: number;
+  nome: string;
+  especialidade_medica: string;
+}
+
 interface Agendamento {
   id: number;
-  exameId: number;
-  dataHora: string;
+  exame_id: number;
+  medico_id: number;
+  data_hora: string;
   observacoes?: string;
+  exame: Exame;
 }
 
 interface AgendamentosState {
@@ -38,7 +46,8 @@ const agendamentosSlice = createSlice({
         state.erro = null;
       })
       .addCase(criarAgendamento.fulfilled, (state, action) => {
-        state.lista.push(action.payload);
+        const novoAgendamento = action.payload as unknown as Agendamento;
+        state.lista.push(novoAgendamento);
       })
       .addCase(criarAgendamento.rejected, (state, action) => {
         state.erro = action.payload as string;
