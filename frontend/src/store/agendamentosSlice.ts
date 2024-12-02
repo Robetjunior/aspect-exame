@@ -1,3 +1,4 @@
+// src/store/agendamentosSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface Agendamento {
@@ -9,10 +10,12 @@ interface Agendamento {
 
 interface AgendamentosState {
   lista: Agendamento[];
+  carregado: boolean;
 }
 
 const initialState: AgendamentosState = {
   lista: [],
+  carregado: false,
 };
 
 const agendamentosSlice = createSlice({
@@ -27,6 +30,7 @@ const agendamentosSlice = createSlice({
     },
     setAgendamentos: (state, action: PayloadAction<Agendamento[]>) => {
       state.lista = action.payload;
+      state.carregado = true;
     },
   },
 });

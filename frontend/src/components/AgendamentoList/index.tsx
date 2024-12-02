@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import api from '../../services/api';
 import Modal from 'react-modal';
-import { useAgendamentos } from '../../contexts/AgendamentosContext';
-import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners'; 
+import { toast } from 'react-toastify';
+import { useAppSelector, useAppDispatch } from '../../hooks';
+import { setAgendamentos, removerAgendamento } from '../../store/agendamentosSlice';
 import {
   ListContainer,
   List,
@@ -20,10 +21,32 @@ import {
 Modal.setAppElement('#root');
 
 export const AgendamentosList: React.FC = () => {
-  const { agendamentos, removerAgendamento } = useAgendamentos();
+  const dispatch = useAppDispatch();
+  const { lista, carregado } = useAppSelector((state) => state.agendamentos);
+
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [agendamentoToDelete, setAgendamentoToDelete] = useState<number | null>(null);
-  const [loading, setLoading] = useState<boolean>(false); // Estado de carregamento
+  const [loading, setLoading] = useState<boolean>(false);
+
+  useEffect(() => {
+    const fetchAgendamentos = async () => {
+      if (!carregado) {
+        try {
+          setLoading(true);
+          const response = await api.get('/agendamentos');
+          console.log(response.data)
+          dispatch(setAgendamentos(response.data));
+        } catch (error) {
+          console.error('Erro ao buscar agendamentos:', error);
+          toast.error('Erro ao carregar agendamentos');
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+
+    fetchAgendamentos();
+  }, [carregado, dispatch]);
 
   const openModal = (id: number) => {
     setAgendamentoToDelete(id);
@@ -37,23 +60,23 @@ export const AgendamentosList: React.FC = () => {
 
   const handleDelete = async () => {
     if (agendamentoToDelete !== null) {
-      setLoading(true); // Inicia o carregamento
+      setLoading(true);
       try {
         await api.delete(`/agendamentos/${agendamentoToDelete}`);
-        removerAgendamento(agendamentoToDelete);
+        dispatch(removerAgendamento(agendamentoToDelete));
         toast.success('Agendamento deletado!');
         closeModal();
       } catch (error) {
         console.error('Erro ao excluir agendamento:', error);
         toast.error('Erro ao excluir agendamento');
       } finally {
-        setLoading(false); // Finaliza o carregamento
+        setLoading(false);
       }
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = {
+  const formatDate = (dateString) => {
+    const options = {
       day: '2-digit',
       month: '2-digit',
       year: 'numeric',
@@ -65,13 +88,15 @@ export const AgendamentosList: React.FC = () => {
 
   return (
     <ListContainer>
-      {agendamentos.length === 0 ? (
+      {loading ? (
+        <p>Carregando agendamentos...</p>
+      ) : lista.length === 0 ? (
         <NoAgendamentosMessage>
           Não há agendamentos realizados.
         </NoAgendamentosMessage>
       ) : (
         <List>
-          {agendamentos.map((agendamento) => (
+          {lista.map((agendamento) => (
             <ListItem key={agendamento.id}>
               <div>
                 <ItemText>
