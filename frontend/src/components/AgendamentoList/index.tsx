@@ -3,7 +3,9 @@ import api from '../../services/api';
 import Modal from 'react-modal';
 import { ClipLoader } from 'react-spinners'; 
 import { toast } from 'react-toastify';
-import { useAppSelector, useAppDispatch } from '../../hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { useAppDispatch } from '../../hooks';
 import { setAgendamentos, removerAgendamento } from '../../store/agendamentosSlice';
 import {
   ListContainer,
@@ -22,7 +24,7 @@ Modal.setAppElement('#root');
 
 export const AgendamentosList: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { lista, carregado } = useAppSelector((state) => state.agendamentos);
+  const { lista, carregado } = useSelector((state: RootState) => state.agendamentos);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [agendamentoToDelete, setAgendamentoToDelete] = useState<number | null>(null);

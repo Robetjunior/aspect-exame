@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import api from '../../services/api';
+import { toast } from 'react-toastify';
+import { criarAgendamento } from '../../services/agendamentoService';
 import { Container, Form, FormGroup, Button, CalendarContainer, TimeSlotsContainer } from './styles';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
-import { useAgendamentos } from '../../contexts/AgendamentosContext';
-import { toast } from 'react-toastify';
-import ClipLoader from 'react-spinners/ClipLoader';
-
+import { setAgendamentos } from '../../store/agendamentosSlice';
+import api from '../../services/api';
+import { useAppDispatch } from '../../hooks';
+import { ClipLoader } from 'react-spinners';
 interface Exame {
   id: number;
   nome: string;
@@ -26,18 +27,18 @@ interface Disponibilidade {
 }
 
 export const AgendamentoForm: React.FC = () => {
+  const dispatch = useAppDispatch();
+
   const [exames, setExames] = useState<Exame[]>([]);
   const [medicos, setMedicos] = useState<Medico[]>([]);
   const [disponibilidades, setDisponibilidades] = useState<Disponibilidade[]>([]);
-  const [exameId, setExameId] = useState<number | ''>('');
-  const [medicoId, setMedicoId] = useState<number | ''>('');
+  const [exameId, setExameId] = useState<number | ''>(''); 
+  const [medicoId, setMedicoId] = useState<number | ''>(''); 
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [observacoes, setObservacoes] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
 
-  const { adicionarAgendamento } = useAgendamentos();
-  
   useEffect(() => {
     const fetchExames = async () => {
       try {
@@ -102,36 +103,41 @@ export const AgendamentoForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!exameId || !medicoId || !selectedDate || !selectedTime) {
-        toast.info('Por favor, preencha todos os campos obrigatórios.');
-        return;
+      toast.info('Por favor, preencha todos os campos obrigatórios.');
+      return;
     }
     setLoading(true);
     try {
-        const data_hora = new Date(selectedDate);
-        const [hours, minutes] = selectedTime.split(':').map(Number);
-        data_hora.setHours(hours, minutes);
+      const data_hora = new Date(selectedDate);
+      const [hours, minutes] = selectedTime.split(':').map(Number);
+      data_hora.setHours(hours, minutes);
+      const novoAgendamento = {
+        exame_id: exameId,
+        medico_id: medicoId,
+        data_hora: data_hora.toISOString(),
+        observacoes,
+      };
 
-        const novoAgendamento = {
-            exame_id: exameId,
-            medico_id: medicoId,
-            data_hora: data_hora.toISOString(),
-            observacoes,
-        };
+      // Dispatch action to create agendamento
+      await dispatch(criarAgendamento(novoAgendamento)).unwrap();
+      
+      // Optionally, fetch updated agendamentos to display in AgendamentosList
+      const response = await api.get('/agendamentos');
+      dispatch(setAgendamentos(response.data));
 
-        await adicionarAgendamento(novoAgendamento);
-        toast.success('Agendamento criado com sucesso!');
-        setExameId('');
-        setMedicoId('');
-        setSelectedDate(null);
-        setSelectedTime('');
-        setObservacoes('');
+      toast.success('Agendamento criado com sucesso!');
+      setExameId('');
+      setMedicoId('');
+      setSelectedDate(null);
+      setSelectedTime('');
+      setObservacoes('');
     } catch (error) {
         console.error('Erro ao criar agendamento:', error);
         toast.error('Erro ao criar agendamento. Tente novamente.');
-    } finally {
+    }finally {
       setLoading(false);
     }
-};
+  };
 
   const handleExameChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedExameId = Number(e.target.value);
